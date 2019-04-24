@@ -1,13 +1,27 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, {Component} from 'react';
+import {createStackNavigator, createAppContainer} from 'react-navigation';
+import Home from './src/screens/Home';
+import PitcherNew from './src/screens/pitchers/New';
+import PitcherIndex from './src/screens/pitchers/Index';
+import {StyleSheet, Text, View} from 'react-native';
 
-export default class App extends React.Component {
+const AppNavigator = createStackNavigator(
+  {
+    Home,
+    PitcherNew,
+    PitcherIndex
+  },
+  {
+    initialRouteName: 'Home'
+  }
+);
+
+const AppContainer = createAppContainer(AppNavigator);
+
+
+export default class App extends Component {
   render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
-    );
+    return <AppContainer />;
   }
 }
 
