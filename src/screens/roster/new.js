@@ -8,7 +8,7 @@ import {
   TextInput,
   Alert
 } from 'react-native';
-
+import common from '../../style/common.style.js';
 import { db } from '../../config';
 
 let addPitcher = (pitcher, callback) => {
@@ -18,27 +18,29 @@ let addPitcher = (pitcher, callback) => {
   callback()
 }
 
-export default class PitcherNew extends Component {
+export default class RosterNew extends Component {
   state = {
     name: ''
   }
 
   render() {
+    let disabled = this.state.name == ''
     return (
       <View style={styles.main}>
         <TextInput
-          style={styles.pitcherInput}
+          style={common.input}
           onChange={this._handleChange}
           value={this.state.name}
           placeholder='Pitchers Name'
           placeholderTextColor='#c0c0ff'
           />
         <TouchableHighlight
-          style={this.state.name == '' ? [styles.button, styles.buttonDisabled] : styles.button}
+          style={disabled ? [common.btn, common.btnDisabled] : common.btn}
           underlayColor='white'
           onPress={this._handleSubmit}
+          disabled={disabled}
         >
-          <Text style={styles.buttonText}>Add</Text>
+          <Text style={common.btnText}>Add</Text>
         </TouchableHighlight>
       </View>
     );
@@ -63,9 +65,6 @@ export default class PitcherNew extends Component {
   }
 }
 
-let $purple = '#5151fb'
-let $lightPurple = '#c0c0ff'
-
 const styles = StyleSheet.create({
   main: {
     flex: 1,
@@ -73,38 +72,5 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     backgroundColor: 'white'
-  },
-  pitcherInput: {
-    height: 50,
-    padding: 4,
-    marginRight: 5,
-    fontSize: 23,
-    borderWidth: 1,
-    borderColor: $purple,
-    borderRadius: 8,
-    color: $purple,
-    textAlign: 'center'
-  },
-  buttonText: {
-    fontSize: 18,
-    color: 'white',
-    alignSelf: 'center',
-    fontWeight: 'bold'
-  },
-  button: {
-    height: 45,
-    flexDirection: 'row',
-    backgroundColor: $purple,
-    borderColor: $purple,
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 10,
-    marginTop: 25,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
-  },
-  buttonDisabled: {
-    backgroundColor: $lightPurple,
-    borderColor: $lightPurple
   }
 });

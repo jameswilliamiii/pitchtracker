@@ -1,18 +1,18 @@
 import React, {Component} from 'react';
 import {createStackNavigator, createAppContainer} from 'react-navigation';
-import Home from './src/screens/Home';
-import PitcherNew from './src/screens/pitchers/New';
-import PitcherIndex from './src/screens/pitchers/Index';
+import RosterIndex from './src/screens/roster/index';
+import RosterNew from './src/screens/roster/new';
+import RosterShow from './src/screens/roster/show';
 import {StyleSheet, Text, View} from 'react-native';
 
 const AppNavigator = createStackNavigator(
   {
-    Home,
-    PitcherNew,
-    PitcherIndex
+    RosterIndex,
+    RosterNew,
+    RosterShow
   },
   {
-    initialRouteName: 'Home'
+    initialRouteName: 'RosterIndex'
   }
 );
 
