@@ -2,18 +2,16 @@ import React, {Component} from 'react';
 
 import {
   View,
-  Text,
-  TouchableHighlight,
   StyleSheet,
-  TextInput,
-  Alert
+  Keyboard
 } from 'react-native';
+import { Button, Text, Input, Item, Toast } from "native-base";
 import common from '../../style/common.style.js';
 import { db } from '../../config';
 
-let addPitcher = (pitcher, callback) => {
-  db.ref('/pitchers').push({
-    name: pitcher
+let addPlayer = (player, callback) => {
+  db.ref('/players').push({
+    name: player
   });
   callback()
 }
@@ -27,21 +25,16 @@ export default class RosterNew extends Component {
     let disabled = this.state.name == ''
     return (
       <View style={styles.main}>
-        <TextInput
-          style={common.input}
+        <Item regular style={styles.input}>
+          <Input
+          placeholder="Player's Name"
           onChange={this._handleChange}
           value={this.state.name}
-          placeholder='Pitchers Name'
-          placeholderTextColor='#c0c0ff'
           />
-        <TouchableHighlight
-          style={disabled ? [common.btn, common.btnDisabled] : common.btn}
-          underlayColor='white'
-          onPress={this._handleSubmit}
-          disabled={disabled}
-        >
-          <Text style={common.btnText}>Add</Text>
-        </TouchableHighlight>
+        </Item>
+        <Button primary block onPress={this._handleSubmit} disabled={disabled}>
+          <Text>Save</Text>
+        </Button>
       </View>
     );
   }
@@ -53,11 +46,12 @@ export default class RosterNew extends Component {
   }
 
   _handleSubmit = () => {
-    addPitcher(this.state.name, this._clearName);
-    Alert.alert(
-      this.state.name + ' added to your roster',
-      null
-    )
+    Keyboard.dismiss();
+    addPlayer(this.state.name, this._clearName);
+    Toast.show({
+      text: this.state.name + ' added to your roster',
+      duration: 3000
+    });
   }
 
   _clearName = ()=> {
@@ -72,5 +66,8 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     backgroundColor: 'white'
+  },
+  input: {
+    marginBottom: 30
   }
 });

@@ -17,8 +17,8 @@ export default class RosterShow extends Component {
   }
 
   componentDidMount() {
-    let pitchersRef = db.ref('/pitchers/' + this.state.id)
-    pitchersRef.on('value', snapshot => {
+    let playersRef = db.ref('/players/' + this.state.id)
+    playersRef.on('value', snapshot => {
       if (snapshot) {
         this.setState({
           strikes: snapshot.val().strikes || 0,
@@ -58,7 +58,7 @@ export default class RosterShow extends Component {
 
   _addStrike() {
     let strikes = this.state.strikes + 1
-    db.ref('/pitchers/' + this.state.id).update({
+    db.ref('/players/' + this.state.id).update({
       strikes: strikes
     });
     this.setState({ strikes: strikes })
@@ -66,7 +66,7 @@ export default class RosterShow extends Component {
 
   _addBall() {
     let balls = this.state.balls + 1
-    db.ref('/pitchers/' + this.state.id).update({
+    db.ref('/players/' + this.state.id).update({
       balls: balls
     });
     this.setState({balls: balls})
