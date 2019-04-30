@@ -6,7 +6,8 @@ import {
   Keyboard
 } from 'react-native';
 import { Button, Text, Input, Item, Toast } from "native-base";
-import { addPlayer } from '../../helpers/database'
+import { addPlayer } from '../../helpers/database';
+import moment from 'moment';
 
 export default class RosterNew extends Component {
   state = {
@@ -39,7 +40,7 @@ export default class RosterNew extends Component {
 
   _handleSubmit = () => {
     Keyboard.dismiss();
-    data = { name: this.state.name }
+    data = { name: this.state.name, updated_at: moment().format() }
     addPlayer(data, this._clearName);
     Toast.show({
       text: this.state.name + ' added to your roster',
