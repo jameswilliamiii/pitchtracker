@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import { View, StyleSheet } from 'react-native';
-import { Button, Text, Card, CardItem} from "native-base";
+import { Button, Text, Card, CardItem, Body} from "native-base";
 import {Col, Row} from 'react-native-easy-grid';
 import {getPlayerGame, updatePlayerGame} from '../../helpers/database';
 import common from '../../style/common.style.js';
@@ -31,30 +31,24 @@ export default class RosterShow extends Component {
 
   render() {
     return (
-      <View style={[styles.main, common.body]}>
-        <Row size={1}></Row>
-        <Row size={1}>
-          <Col size={1}>
+      <View style={[styles.content, common.body]}>
+        <Row>
+          <Col size={1} style={styles.centered}>
             <Card>
               <CardItem>
-                <Row>
-                  <Col style={styles.cardItem}>
-                    <Text style={styles.statsNumber}>{this.state.pitches}</Text>
-                    <Text style={[styles.bodyLabel, common.bodyLabel]}>Pitch Count</Text>
-                  </Col>
-                </Row>
+                <Body>
+                  <Text style={styles.statsNumber}>{this.state.pitches}</Text>
+                  <Text style={[styles.bodyLabel, common.bodyLabel]}>Pitch Count</Text>
+                </Body>
               </CardItem>
             </Card>
           </Col>
         </Row>
-        <Row size={1}></Row>
-        <Row size={1}>
-          <Col size={1}>
-            <View>
-              <Button primary block onPress={()=> this._addPitch()}>
-                <Text uppercase>Add Pitch</Text>
-              </Button>
-            </View>
+        <Row>
+          <Col size={1} style={styles.centered}>
+            <Button primary block onPress={()=> this._addPitch()}>
+              <Text uppercase>Add Pitch</Text>
+            </Button>
           </Col>
         </Row>
       </View>
@@ -80,12 +74,10 @@ export default class RosterShow extends Component {
 }
 
 const styles = StyleSheet.create({
-  main: {
+  content: {
     flex: 1,
-    padding: 30,
     flexDirection: 'column',
-    justifyContent: 'space-around',
-    backgroundColor: 'white'
+    padding: 30
   },
   statsNumber: {
     alignSelf: 'center',
@@ -95,7 +87,7 @@ const styles = StyleSheet.create({
   cardItem: {
     paddingBottom: 50
   },
-  bodyLabel: {
-    marginTop: 5
+  centered: {
+    justifyContent: 'center'
   }
 });
