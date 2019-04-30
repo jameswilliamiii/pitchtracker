@@ -6,15 +6,7 @@ import {
   Keyboard
 } from 'react-native';
 import { Button, Text, Input, Item, Toast } from "native-base";
-import common from '../../style/common.style.js';
-import { db } from '../../config';
-
-let addPlayer = (player, callback) => {
-  db.ref('/players').push({
-    name: player
-  });
-  callback()
-}
+import { addPlayer } from '../../helpers/database'
 
 export default class RosterNew extends Component {
   state = {
@@ -47,7 +39,8 @@ export default class RosterNew extends Component {
 
   _handleSubmit = () => {
     Keyboard.dismiss();
-    addPlayer(this.state.name, this._clearName);
+    data = { name: this.state.name }
+    addPlayer(data, this._clearName);
     Toast.show({
       text: this.state.name + ' added to your roster',
       duration: 3000

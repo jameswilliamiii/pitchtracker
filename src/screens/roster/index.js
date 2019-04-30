@@ -5,11 +5,8 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Button, Text } from "native-base";
-import common from '../../style/common.style.js';
 import RosterShowComponent from '../../components/roster/show_component';
-import {db} from '../../config';
-
-let rosterRef = db.ref('/players')
+import {getPlayers} from '../../helpers/database.js';
 
 export default class RosterIndex extends Component {
   state = {
@@ -21,21 +18,7 @@ export default class RosterIndex extends Component {
   };
 
   componentDidMount() {
-    rosterRef.on('value', snapshot => {
-      if (snapshot.val()) {
-        let data = snapshot.val()
-        let roster = Object.entries(data).map(arr =>
-          ({
-            id: arr[0],
-            name: arr[1].name,
-            pitches: arr[1].pitches || 0
-          })
-        )
-        this.setState({roster: roster});
-      } else {
-        return false
-      }
-    });
+    getPlayers(this._assignInitialState);
   }
 
   static navigationOptions = {
@@ -61,6 +44,21 @@ export default class RosterIndex extends Component {
         </View>
       </View>
     );
+  }
+
+  _assignInitialState = (snapshot) => {
+    if (snapshot.val()) {
+      let data = snapshot.val()
+      let roster = Object.entries(data).map(arr =>
+        ({
+          id: arr[0],
+          name: arr[1].name
+        })
+      )
+      this.setState({roster: roster});
+    } else {
+      return false
+    }
   }
 }
 

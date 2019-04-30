@@ -2,7 +2,10 @@ import React, {Component} from 'react';
 
 import { View, StyleSheet } from 'react-native';
 import { Button, Text} from "native-base";
-import {db} from '../../config';
+import {getPlayerGame, updatePlayerGame} from '../../helpers/database';
+import common from '../../style/common.style.js';
+
+import moment from 'moment';
 
 export default class RosterShow extends Component {
   state = {
@@ -11,34 +14,41 @@ export default class RosterShow extends Component {
   }
 
   componentDidMount() {
-    let playersRef = db.ref('/players/' + this.state.id)
-    playersRef.on('value', snapshot => {
-      if (snapshot) {
-        this.setState({pitches: snapshot.val().pitches || 0});
-      } else {
-        return false
-      }
-    });
+    let date = moment().startOf('day')
+    getPlayerGame(this.state.id, date, this._assignInitialState)
   }
 
   render() {
     return (
       <View style={styles.main}>
-        <Text>Pitch Count: {this.state.pitches}</Text>
-
-        <Button primary onPress={()=> this._addPitch()}>
-          <Text>Add Pitch</Text>
-        </Button>
+        <View style={styles.stats}>
+          <Text style={styles.statsNumber}>{this.state.pitches}</Text>
+          <Text style={common.bodyLabel}>Pitch Count</Text>
+        </View>
+        <View>
+          <Button primary block onPress={()=> this._addPitch()}>
+            <Text>Add Pitch</Text>
+          </Button>
+        </View>
       </View>
     );
   }
 
+  _assignInitialState = (snapshot) => {
+    if (snapshot.val()) {
+      this.setState({pitches: snapshot.val().pitches || 0});
+    } else {
+      return false
+    }
+  }
+
   _addPitch() {
-    let pitches = this.state.pitches + 1
-    db.ref('/players/' + this.state.id).update({
-      pitches: pitches
-    });
-    this.setState({ pitches: pitches })
+    let date = moment().startOf('day')
+    let data = {
+      pitches: this.state.pitches + 1
+    }
+    updatePlayerGame(this.state.id, date, data)
+    this.setState({ pitches: data.pitches })
   }
 }
 
@@ -47,7 +57,16 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 30,
     flexDirection: 'column',
-    justifyContent: 'flex-start',
+    justifyContent: 'space-around',
     backgroundColor: 'white'
+  },
+  stats: {
+    alignSelf: 'center',
+    justifyContent: 'flex-start',
+  },
+  statsNumber: {
+    alignSelf: 'center',
+    fontSize: 120,
+    fontWeight: 'bold'
   }
 });
