@@ -24,7 +24,8 @@ export default class PlayerCardComponent extends Component {
   }
 
   render() {
-    let icon = this._getIcon()
+    const cardStyle = this._getCardStyle()
+    let icon = this._getIcon(cardStyle)
     let pitchCount = this._getPitchCount()
     return (
       <Card>
@@ -32,20 +33,20 @@ export default class PlayerCardComponent extends Component {
           <Col onPress={() => this.props.flip()} activeOpacity={100}>
             <Row size={1} style={styles.cardHeader}>
               <Col>
-                <Text style={styles.name}>
+                <Text style={[styles.name]}>
                   {this.props.player.name}
                 </Text>
               </Col>
             </Row>
             <Row size={3}>
               <Col>
-                <Text style={styles.statBody}>{pitchCount}</Text>
+                <Text style={[cardStyle, styles.statBody]}>{pitchCount}</Text>
               </Col>
             </Row>
             <Row size={1} style={styles.bottomRow}>
               <Col></Col>
               <Col>
-                <Text style={common.bodyLabel}>
+                <Text style={[common.bodyLabel]}>
                   {
                     this.props.today?
                       'Today'
@@ -64,13 +65,13 @@ export default class PlayerCardComponent extends Component {
     );
   }
 
-  _getIcon() {
+  _getIcon(cardStyle) {
     if (this.props.today){
       return(
         <Icon
           name="ios-add-circle-outline"
           onPress={() => this.props.navigation.navigate('RosterShow', { id: this.props.player.id })}
-          style={styles.add}
+          style={[styles.add, cardStyle]}
         />
       )
     } else {
@@ -102,6 +103,36 @@ export default class PlayerCardComponent extends Component {
       this.setState({ weekPitchCount: total })
     })
   }
+
+  _getCardStyle() {
+    return(this.props.today ? this._todayCardStyle() : this._weekCardStyle())
+  }
+
+  _todayCardStyle() {
+    let pitchCount = this.state.todayPitchCount
+    if (pitchCount <= 45){
+      return(common.defaultCard)
+    }
+    else if (pitchCount <= 60){
+      return(common.warningCard)
+    }
+    else{
+      return(common.dangerCard)
+    }
+  }
+
+  _weekCardStyle() {
+    let pitchCount = this.state.weekPitchCount
+    if (pitchCount <= 100){
+      return(common.defaultCard)
+    }
+    else if (pitchCount <= 125){
+      return(common.warningCard)
+    }
+    else{
+      return(common.dangerCard)
+    }
+  }
 }
 
 const styles = StyleSheet.create({
@@ -113,14 +144,12 @@ const styles = StyleSheet.create({
   name: {
     textAlign: 'center',
     fontSize: 21,
-    color: '#333333',
     fontWeight: 'bold',
     textTransform: 'uppercase'
   },
   statBody: {
-    backgroundColor: 'white',
     fontWeight: 'bold',
-    fontSize: 62,
+    fontSize: 80,
     alignSelf: 'center'
   },
   cardHeader: {

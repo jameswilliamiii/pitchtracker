@@ -70,6 +70,7 @@ export default class RosterNew extends Component {
     addPlayer(data, this._clearName);
     Toast.show({
       text: this.state.name + ' added to your roster',
+      type: 'success',
       duration: 3000
     });
   }

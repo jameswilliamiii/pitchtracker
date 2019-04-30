@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 
 import { View, StyleSheet } from 'react-native';
-import { Button, Text, Card, CardItem, Body} from "native-base";
+import { Button, Text, Card, CardItem, Body, Toast } from "native-base";
 import {Col, Row} from 'react-native-easy-grid';
 import {getPlayerGame, updatePlayerGame} from '../../helpers/database';
 import common from '../../style/common.style.js';
@@ -30,6 +30,7 @@ export default class RosterShow extends Component {
   }
 
   render() {
+    const cardStyle = this._cardStyle()
     return (
       <View style={[styles.content, common.body]}>
         <Row>
@@ -37,7 +38,7 @@ export default class RosterShow extends Component {
             <Card>
               <CardItem>
                 <Body>
-                  <Text style={styles.statsNumber}>{this.state.pitches}</Text>
+                  <Text style={[styles.statsNumber, cardStyle]}>{this.state.pitches}</Text>
                   <Text style={[styles.bodyLabel, common.bodyLabel]}>Pitch Count</Text>
                 </Body>
               </CardItem>
@@ -69,7 +70,40 @@ export default class RosterShow extends Component {
       pitches: this.state.pitches + 1
     }
     updatePlayerGame(this.state.id, date, data)
-    this.setState({ pitches: data.pitches })
+    this.setState({ pitches: data.pitches }, ()=> {
+      if (data.pitches > 65 && data.pitches < 75) {
+        Toast.show({
+          text: 'Nearing daily limit!',
+          type: 'danger',
+          position: "bottom",
+          buttonText: 'Dismiss',
+          duration: 7000
+        });
+      } else if (data.pitches > 75) {
+        Toast.show({
+          text: 'Exceeded daily limit!',
+          type: 'danger',
+          position: "bottom",
+          buttonText: 'Dismiss',
+          duration: 7000
+        });
+      }
+    }
+
+    )
+  }
+
+  _cardStyle() {
+    let pitchCount = this.state.pitches
+    if (pitchCount <= 45){
+      return(common.defaultCard)
+    }
+    else if (pitchCount <= 60){
+      return(common.warningCard)
+    }
+    else{
+      return(common.dangerCard)
+    }
   }
 }
 
