@@ -6,5 +6,8 @@ export default StyleSheet.create({
     alignSelf: 'center',
     fontSize: 14,
     textTransform: 'uppercase'
+  },
+  body: {
+    backgroundColor: '#FAFAFA'
   }
 });

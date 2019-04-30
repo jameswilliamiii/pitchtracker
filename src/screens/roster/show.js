@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 
 import { View, StyleSheet } from 'react-native';
-import { Button, Text} from "native-base";
+import { Button, Text, Card, CardItem} from "native-base";
+import {Col, Row} from 'react-native-easy-grid';
 import {getPlayerGame, updatePlayerGame} from '../../helpers/database';
 import common from '../../style/common.style.js';
 
@@ -13,6 +14,16 @@ export default class RosterShow extends Component {
     pitches: 0
   }
 
+  static navigationOptions = {
+    title: 'Track Pitches',
+    headerStyle: {
+      backgroundColor: '#FAFAFA',
+    },
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
+
   componentDidMount() {
     let date = moment().startOf('day')
     getPlayerGame(this.state.id, date, this._assignInitialState)
@@ -20,16 +31,32 @@ export default class RosterShow extends Component {
 
   render() {
     return (
-      <View style={styles.main}>
-        <View style={styles.stats}>
-          <Text style={styles.statsNumber}>{this.state.pitches}</Text>
-          <Text style={common.bodyLabel}>Pitch Count</Text>
-        </View>
-        <View>
-          <Button primary block onPress={()=> this._addPitch()}>
-            <Text>Add Pitch</Text>
-          </Button>
-        </View>
+      <View style={[styles.main, common.body]}>
+        <Row size={1}></Row>
+        <Row size={1}>
+          <Col size={1}>
+            <Card>
+              <CardItem>
+                <Row>
+                  <Col style={styles.cardItem}>
+                    <Text style={styles.statsNumber}>{this.state.pitches}</Text>
+                    <Text style={[styles.bodyLabel, common.bodyLabel]}>Pitch Count</Text>
+                  </Col>
+                </Row>
+              </CardItem>
+            </Card>
+          </Col>
+        </Row>
+        <Row size={1}></Row>
+        <Row size={1}>
+          <Col size={1}>
+            <View>
+              <Button primary block onPress={()=> this._addPitch()}>
+                <Text uppercase>Add Pitch</Text>
+              </Button>
+            </View>
+          </Col>
+        </Row>
       </View>
     );
   }
@@ -60,13 +87,15 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     backgroundColor: 'white'
   },
-  stats: {
-    alignSelf: 'center',
-    justifyContent: 'flex-start',
-  },
   statsNumber: {
     alignSelf: 'center',
     fontSize: 120,
     fontWeight: 'bold'
+  },
+  cardItem: {
+    paddingBottom: 50
+  },
+  bodyLabel: {
+    marginTop: 5
   }
 });

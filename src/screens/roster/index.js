@@ -5,6 +5,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import { Button, Text } from "native-base";
+import common from '../../style/common.style.js';
 import RosterShowComponent from '../../components/roster/show_component';
 import {getPlayers} from '../../helpers/database.js';
 
@@ -13,19 +14,15 @@ export default class RosterIndex extends Component {
     roster: []
   };
 
-  static navigationOptions = {
-    title: 'Roster',
-  };
-
   componentDidMount() {
     getPlayers(this._assignInitialState);
   }
 
   static navigationOptions = {
+    title: 'Roster',
     headerStyle: {
       backgroundColor: '#FAFAFA',
     },
-    headerTintColor: '#fff',
     headerTitleStyle: {
       fontWeight: 'bold',
     },
@@ -33,13 +30,13 @@ export default class RosterIndex extends Component {
 
   render() {
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, common.body]}>
         {this.state.roster.length > 0 ?
           (<RosterShowComponent roster={this.state.roster} navigation={this.props.navigation} />) : (null)
         }
         <View style={styles.btnContainer}>
           <Button block primary onPress={() => this.props.navigation.navigate('RosterNew')}>
-            <Text style={styles.btnText}>Add Player</Text>
+            <Text uppercase>Add Player</Text>
           </Button>
         </View>
       </View>
@@ -66,8 +63,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    flexDirection: 'column',
-    backgroundColor: '#FAFAFA'
+    flexDirection: 'column'
   },
   btnContainer: {
     padding: 30,
