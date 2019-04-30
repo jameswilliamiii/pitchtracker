@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { StyleSheet, FlatList} from 'react-native';
-import theme from '../../style/theme.style.js';
 import PropTypes from 'prop-types';
 import PlayerComponent from './player_component';
 
@@ -19,9 +18,3 @@ export default class RosterShowComponent extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  main: {
-    backgroundColor: 'white'
-  }
-})

@@ -4,8 +4,10 @@ import {createStackNavigator, createAppContainer} from 'react-navigation';
 import RosterIndex from './src/screens/roster/index';
 import RosterNew from './src/screens/roster/new';
 import RosterShow from './src/screens/roster/show';
-import {StyleSheet} from 'react-native';
-import { Font } from 'expo';
+import { StyleProvider } from 'native-base';
+import getTheme from './native-base-theme/components';
+import material from './native-base-theme/variables/material';
+import { AppLoading, Font } from 'expo';
 
 const AppNavigator = createStackNavigator(
   {
@@ -23,32 +25,29 @@ const AppContainer = createAppContainer(AppNavigator);
 
 export default class App extends Component {
   state = {
-    fontLoaded: false,
+    loading: true,
   };
 
-  async componentDidMount() {
+  async componentWillMount() {
     await Font.loadAsync({
       'Roboto': require('native-base/Fonts/Roboto.ttf'),
       'Roboto_medium': require('native-base/Fonts/Roboto_medium.ttf'),
       'FontAwesome': require('native-base/Fonts/FontAwesome.ttf')
     });
-    this.setState({ fontLoaded: true });
+    this.setState({ loading: false });
   }
 
   render() {
-    return (
-      <Root>
-        <AppContainer />
-      </Root>
-    );
+    if (this.state.loading) {
+      return <AppLoading />;
+    } else {
+      return (
+        <Root>
+          <StyleProvider style={getTheme(material)}>
+            <AppContainer />
+          </StyleProvider>
+        </Root>
+      );
+    }
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});

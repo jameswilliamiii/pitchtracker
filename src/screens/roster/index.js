@@ -27,7 +27,8 @@ export default class RosterIndex extends Component {
         let roster = Object.entries(data).map(arr =>
           ({
             id: arr[0],
-            name: arr[1].name
+            name: arr[1].name,
+            pitches: arr[1].pitches || 0
           })
         )
         this.setState({roster: roster});
@@ -37,6 +38,16 @@ export default class RosterIndex extends Component {
     });
   }
 
+  static navigationOptions = {
+    headerStyle: {
+      backgroundColor: '#FAFAFA',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+  };
+
   render() {
     return (
       <View style={styles.container}>
@@ -44,8 +55,8 @@ export default class RosterIndex extends Component {
           (<RosterShowComponent roster={this.state.roster} navigation={this.props.navigation} />) : (null)
         }
         <View style={styles.btnContainer}>
-          <Button primary block onPress={() => this.props.navigation.navigate('RosterNew')}>
-            <Text>Add Player</Text>
+          <Button block primary onPress={() => this.props.navigation.navigate('RosterNew')}>
+            <Text style={styles.btnText}>Add Player</Text>
           </Button>
         </View>
       </View>
@@ -58,10 +69,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     flexDirection: 'column',
-    backgroundColor: 'white'
+    backgroundColor: '#FAFAFA'
   },
   btnContainer: {
     padding: 30,
-    paddingTop: 15
-  }
+    paddingTop: 15,
+    paddingBottom: 20
+  },
 })

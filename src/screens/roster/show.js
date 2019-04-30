@@ -1,29 +1,20 @@
 import React, {Component} from 'react';
 
-import {
-  View,
-  Text,
-  TouchableHighlight,
-  StyleSheet
-} from 'react-native';
-import common from '../../style/common.style.js';
+import { View, StyleSheet } from 'react-native';
+import { Button, Text} from "native-base";
 import {db} from '../../config';
 
 export default class RosterShow extends Component {
   state = {
     id: this.props.navigation.getParam('id'),
-    strikes: 0,
-    balls: 0
+    pitches: 0
   }
 
   componentDidMount() {
     let playersRef = db.ref('/players/' + this.state.id)
     playersRef.on('value', snapshot => {
       if (snapshot) {
-        this.setState({
-          strikes: snapshot.val().strikes || 0,
-          balls: snapshot.val().balls || 0
-        });
+        this.setState({pitches: snapshot.val().pitches || 0});
       } else {
         return false
       }
@@ -31,49 +22,23 @@ export default class RosterShow extends Component {
   }
 
   render() {
-    let pitchCount = this._findPitchCount()
     return (
       <View style={styles.main}>
-        <Text>Strikes: {this.state.strikes}</Text>
-        <Text>Balls: {this.state.balls}</Text>
-        <Text>Pitch Count: {pitchCount}</Text>
-        <TouchableHighlight
-          style={common.btn}
-          underlayColor='white'
-          onPress={()=> this._addStrike()}
-        >
-          <Text style={common.btnText}>Strike</Text>
-        </TouchableHighlight>
+        <Text>Pitch Count: {this.state.pitches}</Text>
 
-        <TouchableHighlight
-          style={common.btn}
-          underlayColor='white'
-          onPress={()=> this._addBall()}
-        >
-          <Text style={common.btnText}>Ball</Text>
-        </TouchableHighlight>
+        <Button primary onPress={()=> this._addPitch()}>
+          <Text>Add Pitch</Text>
+        </Button>
       </View>
     );
   }
 
-  _addStrike() {
-    let strikes = this.state.strikes + 1
+  _addPitch() {
+    let pitches = this.state.pitches + 1
     db.ref('/players/' + this.state.id).update({
-      strikes: strikes
+      pitches: pitches
     });
-    this.setState({ strikes: strikes })
-  }
-
-  _addBall() {
-    let balls = this.state.balls + 1
-    db.ref('/players/' + this.state.id).update({
-      balls: balls
-    });
-    this.setState({balls: balls})
-  }
-
-  _findPitchCount() {
-    return this.state.strikes + this.state.balls
+    this.setState({ pitches: pitches })
   }
 }
 
